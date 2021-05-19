@@ -38,3 +38,4 @@ spec:
     - https://github.com/claudioed/bets-helm.git
     - https://github.com/kubernetes-sigs/gateway-api.git
     - https://github.com/istio/istio.git
+    - https://github.com/claudioed/istio-gateway-apis.git
