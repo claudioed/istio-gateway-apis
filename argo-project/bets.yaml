@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: bets
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - group: apiregistration.k8s.io
+      kind: APIService
+    - group: ""
+      kind: Namespace
+    - group: policy
+      kind: PodSecurityPolicy
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: networking.x-k8s.io
+      kind: GatewayClass
+    - group: networking.x-k8s.io
+      kind: Gateway
+    - group: operator.projectcontour.io
+      kind: Contour
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: bets
+      server: https://kubernetes.default.svc
+    - namespace: istio-system
+      server: https://kubernetes.default.svc
+  sourceRepos:
+    - https://github.com/claudioed/bets-helm.git
+    - https://github.com/kubernetes-sigs/gateway-api.git

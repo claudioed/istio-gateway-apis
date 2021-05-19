@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: bets
+  source:
+    path: manifests/charts/istio-control/istio-discovery
+    repoURL: https://github.com/istio/istio.git
+    targetRevision: HEAD
+    helm:
+      params:
+        - name: pilot.env.PILOT_ENABLED_SERVICE_APIS
+          value: "true"
+  destination:
+    namespace: istio-system
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks
